@@ -1,0 +1,65 @@
+@page "/register"
+@using System.ComponentModel.DataAnnotations
+
+<h1>Event Registration</h1>
+
+<EditForm Model="user" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+        <label>Name:</label><br />
+        <InputText @bind-Value="user.Name" />
+        <ValidationMessage For="@(() => user.Name)" />
+    </div>
+
+    <div>
+        <label>Email:</label><br />
+        <InputText @bind-Value="user.Email" />
+        <ValidationMessage For="@(() => user.Email)" />
+    </div>
+
+    <div>
+        <label>Phone:</label><br />
+        <InputText @bind-Value="user.Phone" />
+        <ValidationMessage For="@(() => user.Phone)" />
+    </div>
+
+    <button type="submit">Register</button>
+</EditForm>
+
+@if (registeredUsers.Count > 0)
+{
+    <h3>Registered Users</h3>
+    <ul>
+        @foreach (var u in registeredUsers)
+        {
+            <li>@u.Name (@u.Email, @u.Phone)</li>
+        }
+    </ul>
+}
+
+@code {
+    private User user = new User();
+    private List<User> registeredUsers = new();
+
+    private void HandleValidSubmit()
+    {
+        registeredUsers.Add(user);
+        user = new User(); // reset form
+    }
+
+    public class User
+    {
+        [Required(ErrorMessage = "Name is required")]
+        public string Name { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Email is required")]
+        [EmailAddress(ErrorMessage = "Invalid email format")]
+        public string Email { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Phone is required")]
+        [Phone(ErrorMessage = "Invalid phone number")]
+        public string Phone { get; set; } = string.Empty;
+    }
+}

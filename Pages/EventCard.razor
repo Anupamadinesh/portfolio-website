@@ -1,0 +1,35 @@
+@code {
+    [Parameter] public string Title { get; set; } = "Sample Event";
+    [Parameter] public string Location { get; set; } = "Online";
+    [Parameter] public DateTime Date { get; set; } = DateTime.Now;
+    [Parameter] public string Description { get; set; } = "This is a demo event.";
+
+    [Parameter] public bool Attending { get; set; }
+    [Parameter] public EventCallback<bool> AttendingChanged { get; set; }
+
+    private async Task ToggleAttendance()
+    {
+        Attending = !Attending;
+        await AttendingChanged.InvokeAsync(Attending);
+    }
+}
+
+<div class="card">
+    <h3>@Title</h3>
+    <p><b>Location:</b> @Location</p>
+    <p><b>Date:</b> @Date.ToShortDateString()</p>
+    <p>@Description</p>
+
+    <button @onclick="ToggleAttendance">
+        @(Attending ? "Cancel Attendance" : "Mark as Attending")
+    </button>
+</div>
+
+<style>
+.card {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin: 10px;
+    border-radius: 10px;
+}
+</style>

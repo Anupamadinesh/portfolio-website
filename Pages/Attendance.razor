@@ -1,0 +1,24 @@
+@page "/attendance"
+
+<h1>Event Attendance</h1>
+
+<EventCard Title="Blazor Workshop"
+           Location="Online"
+           Date="@DateTime.Now.AddDays(7)"
+           Description="Learn Blazor with interactive coding!"
+           Attending="@isAttending"
+           AttendingChanged="@((value) => isAttending = value)" />
+
+<p>You are @(isAttending ? "attending" : "not attending") this event.</p>
+
+@if (isAttending)
+{
+    <h3>Attendance List</h3>
+    <ul>
+        <li>You (current user)</li>
+    </ul>
+}
+
+@code {
+    private bool isAttending = false;
+}
